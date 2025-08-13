@@ -1,5 +1,5 @@
 from textnode import TextNode, TextType
-from inline_markdown import split_nodes_delimiter, split_nodes_image, split_nodes_link
+from inline_markdown import split_nodes_delimiter, split_nodes_image, split_nodes_link, text_to_textnodes
 
 
 def main():
@@ -16,17 +16,21 @@ def main():
     #     TextType.TEXT,
     # )
     # new_nodes = split_nodes_image([node])
-    node = TextNode(
-        "![image](https://www.example.COM/IMAGE.PNG)",
-        TextType.TEXT,
-    )
-    node_link = TextNode(
-        "This is text with a [link](https://boot.dev) and [another link](https://blog.boot.dev) with text that follows",
-        TextType.TEXT,
-    )
-    # new_nodes = split_nodes_image([node])
-    new_nodes = split_nodes_link([node_link])
-    print(new_nodes)
+    # node = TextNode(
+    #     "![image](https://www.example.COM/IMAGE.PNG)",
+    #     TextType.TEXT,
+    # )
+    # node_link = TextNode(
+    #     "This is text with a [link](https://boot.dev) and [another link](https://blog.boot.dev) with text that follows",
+    #     TextType.TEXT,
+    # )
+    # # new_nodes = split_nodes_image([node])
+    # new_nodes = split_nodes_link([node_link])
+    # print(new_nodes)
+    
+    input = "This is **text** with an _italic_ word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"
+    text_nodes = text_to_textnodes(input)
+    print(text_nodes)
     
 if __name__ == "__main__":
     main()
