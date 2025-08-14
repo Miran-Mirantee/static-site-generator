@@ -1,6 +1,6 @@
 from textnode import TextNode, TextType
 from inline_markdown import split_nodes_delimiter, split_nodes_image, split_nodes_link, text_to_textnodes
-from block_markdown import markdown_to_blocks
+from block_markdown import markdown_to_blocks, markdown_to_html_node
 
 
 def main():
@@ -33,17 +33,65 @@ def main():
     # text_nodes = text_to_textnodes(input)
     # print(text_nodes)
     
+    # md = """
+    #     This is **bolded** paragraph
+
+    #     This is another paragraph with _italic_ text and `code` here
+    #     This is the same paragraph on a new line
+
+    #     - This is a list
+    #     - with items
+    #     """
+    # blocks = markdown_to_blocks(md)
+    # print(blocks)
+    
     md = """
-        This is **bolded** paragraph
+    This is **bolded** paragraph
+    text in a p
+    tag here  
 
-        This is another paragraph with _italic_ text and `code` here
-        This is the same paragraph on a new line
+    # Heading 1
 
-        - This is a list
-        - with items
-        """
-    blocks = markdown_to_blocks(md)
-    print(blocks)
+    ### Heading 3
+
+    - what
+    - the
+    - fuck
+
+    This is another paragraph with _italic_ text and `code` here
+
+    """
+    
+    md2 = """
+    ```
+    This is text that _should_ remain
+    the **same** even with inline stuff
+    ```
+    """
+    
+    md3 = """
+    This is **bolded** paragraph
+    text in a p
+    tag here
+
+    This is another paragraph with _italic_ text and `code123` here
+
+    """
+    
+    md4 = """
+    - This is a list
+    - with items
+    - and _more_ items
+
+    1. This is an `ordered` list
+    2. with items
+    3. and more items
+
+    """
+
+    node = markdown_to_html_node(md4)
+    html = node.to_html()
+    print(html)
     
     return
     
