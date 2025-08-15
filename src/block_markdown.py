@@ -65,7 +65,10 @@ def block_to_text(block: str, block_type: BlockType) -> list[str]:
         case BlockType.CODE:
             return [block.replace("```", "").lstrip()]
         case BlockType.QUOTE:
-            return [" ".join([re.match(r"^>\s(.+)", item).group(1) for item in block.split("\n")])]
+            return [" ".join(
+                re.match(r"^>\s*(.*)$", item).group(1)
+                for item in block.split("\n")
+            )]
         case BlockType.UNORDERED_LIST:
             return [re.match(r"^-\s+(.+)", item).group(1) for item in block.split("\n")]
         case BlockType.ORDERED_LIST:
