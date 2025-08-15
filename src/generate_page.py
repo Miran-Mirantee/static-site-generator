@@ -8,29 +8,8 @@ def extract_title(markdown: str) -> str:
         if line.startswith("#"):
             return line.lstrip("#").strip()
     return "Untitled"
-
-def generate_page(from_path, template_path, dest_path):
-    print(f"Generating page from {from_path} to {dest_path} using {template_path}")
     
-    with open(from_path, 'r', encoding='utf-8') as from_file:
-        content = from_file.read()
-        
-    with open(template_path, 'r', encoding='utf-8') as from_file:
-        template = from_file.read()
-    
-    html_node = markdown_to_html_node(content)
-    html_content = html_node.to_html()
-    title = extract_title(content)
-    template = template.replace("{{ Content }}", html_content)
-    template = template.replace("{{ Title }}", title)
-    
-    paths = os.path.dirname(dest_path)
-    os.makedirs(paths, exist_ok=True)
-    
-    with open(dest_path, 'w', encoding='utf-8') as to_file:
-        to_file.write(template)
-    
-def generate_page_recursive(from_path, template_path, dest_path):
+def generate_page_recursive(from_path: str, template_path: str, dest_path: str, basepath: str):
     children = os.listdir(from_path)
     if not children:
         return
@@ -47,6 +26,8 @@ def generate_page_recursive(from_path, template_path, dest_path):
             title = extract_title(content)
             template = template.replace("{{ Content }}", html_content)
             template = template.replace("{{ Title }}", title)
+            template = template.replace('href="/', f'href="{basepath}')
+            template = template.replace('src="/', f'src="{basepath}')
             
             os.makedirs(dest_path, exist_ok=True)
     
@@ -56,6 +37,7 @@ def generate_page_recursive(from_path, template_path, dest_path):
             generate_page_recursive(
                 os.path.join(from_path, child),
                 template_path,
-                os.path.join(dest_path, child)
+                os.path.join(dest_path, child),
+                basepath
             )
     
