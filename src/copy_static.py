@@ -1,9 +1,11 @@
 import os
 import shutil
 
-def copy_static():
+def clear_public():
     shutil.rmtree('public', ignore_errors=True)
     os.mkdir('public')
+
+def copy_static():
     copy_static_recursive()
         
 def copy_static_recursive(old_path: str = 'static'):

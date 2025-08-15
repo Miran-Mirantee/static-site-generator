@@ -30,4 +30,32 @@ def generate_page(from_path, template_path, dest_path):
     with open(dest_path, 'w', encoding='utf-8') as to_file:
         to_file.write(template)
     
+def generate_page_recursive(from_path, template_path, dest_path):
+    children = os.listdir(from_path)
+    if not children:
+        return
+    for child in children:
+        if os.path.isfile(os.path.join(from_path, child)):
+            with open(os.path.join(from_path, child), 'r', encoding='utf-8') as from_file:
+                content = from_file.read()
+                
+            with open(template_path, 'r', encoding='utf-8') as from_file:
+                template = from_file.read()
+    
+            html_node = markdown_to_html_node(content)
+            html_content = html_node.to_html()
+            title = extract_title(content)
+            template = template.replace("{{ Content }}", html_content)
+            template = template.replace("{{ Title }}", title)
+            
+            os.makedirs(dest_path, exist_ok=True)
+    
+            with open(os.path.join(dest_path, child.replace('md', 'html')), 'w', encoding='utf-8') as to_file:
+                to_file.write(template)
+        else:
+            generate_page_recursive(
+                os.path.join(from_path, child),
+                template_path,
+                os.path.join(dest_path, child)
+            )
     
